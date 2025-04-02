@@ -1,0 +1,4 @@
+data
+.env
+.nyc_output
+coverage

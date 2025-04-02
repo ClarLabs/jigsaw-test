@@ -1,0 +1,42 @@
+{
+  "name": "blog_editor",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "start": "npx tsc && node build/main.js",
+    "dev": "nodemon app.js",
+    "test": "DEBUG=true nyc --reporter=lcov --reporter=text-summary mocha --timeout 60000"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "mongoose": "^8.13.1",
+    "morgan": "^1.10.0"
+  },
+  "devDependencies": {
+    "@types/chai": "^5.2.1",
+    "@types/cors": "^2.8.17",
+    "@types/express": "^5.0.1",
+    "@types/mocha": "^10.0.10",
+    "@types/morgan": "^1.9.9",
+    "@types/supertest": "^6.0.3",
+    "@types/swagger-ui-express": "^4.1.8",
+    "@typescript-eslint/eslint-plugin": "^8.29.0",
+    "@typescript-eslint/parser": "^8.29.0",
+    "chai": "^5.2.0",
+    "eslint": "^9.23.0",
+    "eslint-plugin-no-floating-promise": "^2.0.0",
+    "eslint-plugin-node": "^11.1.0",
+    "mocha": "^11.1.0",
+    "nyc": "^17.1.0",
+    "prettier": "^3.5.3",
+    "supertest": "^7.1.0",
+    "swagger-ui-express": "^5.0.1",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.8.2"
+  }
+}
