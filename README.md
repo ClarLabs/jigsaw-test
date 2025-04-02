@@ -17,7 +17,7 @@ You're taking over a blog editing backend. It's functional but has subtle bugs a
 
 5. Add `GET /posts/search?q=` for full-text search on title/content (DONE)
 6. Add bulk delete for posts by `tag` (e.g., `DELETE /posts?tag=js`) (DONE)
-7. Return `totalCount` in paginated GET response
+7. Return `totalCount` in paginated GET response (DONE)
 
 #### 🧪 Bonus Points
 
