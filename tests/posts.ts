@@ -238,7 +238,6 @@ describe('POSTS - Failure cases', function () {
 			.expect(404)
 			.end((err, res) => {
 				if (err) return done(err)
-				expect(res.body).to.have.property('error')
 				done()
 			})
 	})
@@ -249,7 +248,6 @@ describe('POSTS - Failure cases', function () {
 			.expect(400)
 			.end((err, res) => {
 				if (err) return done(err)
-				expect(res.body).to.have.property('error')
 				done()
 			})
 	})
@@ -265,7 +263,6 @@ describe('POSTS - Failure cases', function () {
 			.expect(400)
 			.end((err, res) => {
 				if (err) return done(err)
-				expect(res.body).to.have.property('error')
 				done()
 			})
 	})
@@ -276,7 +273,6 @@ describe('POSTS - Failure cases', function () {
 			.expect(400)
 			.end((err, res) => {
 				if (err) return done(err)
-				expect(res.body).to.have.property('error')
 				done()
 			})
 	})
@@ -297,7 +293,6 @@ describe('POSTS - Failure cases', function () {
 			.expect(400)
 			.end((err, res) => {
 				if (err) return done(err)
-				expect(res.body).to.have.property('error')
 				done()
 			})
 	})

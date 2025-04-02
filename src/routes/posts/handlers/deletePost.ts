@@ -1,20 +1,18 @@
-import { Request, Response, NextFunction } from 'express'
+import { NextFunction, Request, Response } from 'express'
 import { Post } from '../../../models/Post'
-import { isMongoId, delCache } from '../../../utils'
+import { AppError, asyncHandler, delCache, isMongoId } from '../../../utils'
 
-export const deletePost = async (req: Request<{ id: string }>, res: Response, next: NextFunction): Promise<void> => {
+export const deletePost = asyncHandler(async (req: Request<{ id: string }>, res: Response, next: NextFunction): Promise<void> => {
 	try {
 		const { id } = req.params
 
 		if (!isMongoId(id)) {
-			res.status(400).json({ error: 'Invalid or missing post ID' })
-			return
+			throw new AppError('Invalid or missing post ID', 400)
 		}
 
 		const result = await Post.findOneAndDelete({ _id: id })
 		if (!result) {
-			res.status(404).json({ error: 'Post not found' })
-			return
+			throw new AppError('Post not found', 404)
 		}
 
 		const cacheKey = `post:${id}`
@@ -24,4 +22,4 @@ export const deletePost = async (req: Request<{ id: string }>, res: Response, ne
 	} catch (err) {
 		next(err)
 	}
-}
+})

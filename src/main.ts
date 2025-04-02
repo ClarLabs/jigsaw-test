@@ -27,10 +27,14 @@ try {
 		authSource: 'admin'
 	}
 
-	mongoose.connect(mongoUrl, {
-		...connectOptions,
-		dbName: 'blog_editor'
-	})
+	mongoose
+		.connect(mongoUrl, { ...connectOptions, dbName: 'blog_editor' })
+		.then(() => console.log('Connected to main database'))
+		.catch((e) => {
+			Sentry.captureException(e)
+			console.error('Failed to connect to main database:', e)
+			process.exit(1)
+		})
 	console.log('Connected to main database')
 } catch (e) {
 	Sentry.captureException(e)
@@ -40,11 +44,6 @@ try {
 app.use(express.json())
 app.use(morgan('tiny'))
 app.use(cors())
-
-app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
-	Sentry.captureException(err)
-	res.status(500).json({ status: 'error', message: err.message || 'Unexpected error' })
-})
 
 const PORT = process.env.PORT || 3000
 
@@ -59,6 +58,19 @@ app.use(express.static('public'))
 app.use('/coverage', express.static('coverage/lcov-report'))
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(null, swaggerDocOptions))
 app.use('/', routes)
+
+app.use((err: any, req: Request, res: Response, next: NextFunction) => {
+	Sentry.captureException(err)
+
+	const statusCode = err.statusCode || 500
+	const message = err.message || 'Internal Server Error'
+
+	res.status(statusCode).json({
+		status: 'error',
+		message,
+		stack: process.env.NODE_ENV === 'production' ? undefined : err.stack
+	})
+})
 
 app.listen(PORT, () => {
 	console.log(`Server running on http://localhost:${PORT}`)
