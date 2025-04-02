@@ -1,14 +1,20 @@
 import * as cors from 'cors'
 import * as express from 'express'
+import { Request, Response, NextFunction } from 'express'
 import * as morgan from 'morgan'
 import * as swaggerUi from 'swagger-ui-express'
 import routes from './routes'
 import * as mongoose from 'mongoose'
 import * as dotenv from 'dotenv'
+import * as Sentry from '@sentry/node'
 
 dotenv.config()
 
 const app = express()
+
+Sentry.init({
+	dsn: process.env.SENTRY_DSN
+})
 
 try {
 	const mongoUrl = process.env.MONGO_URI
@@ -27,6 +33,7 @@ try {
 	})
 	console.log('Connected to main database')
 } catch (e) {
+	Sentry.captureException(e)
 	console.error('Failed to connect to main database:', e)
 }
 
@@ -34,8 +41,9 @@ app.use(express.json())
 app.use(morgan('tiny'))
 app.use(cors())
 
-app.use((err, req, res, next) => {
-	res.status(err.status || 500).json({ status: 'error', message: err.message || 'Unexpected error' })
+app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
+	Sentry.captureException(err)
+	res.status(500).json({ status: 'error', message: err.message || 'Unexpected error' })
 })
 
 const PORT = process.env.PORT || 3000

@@ -7,18 +7,40 @@ export const setCache = async (key: string, value: string, expiry: number) => {
 		throw new Error('Expiry time must be a number')
 	}
 
+	try {
+		await redisClient.set(key, value, 'EX', expiry)
+	} catch (e) {
+		console.error('Error setting cache:', e)
+		throw new Error('Failed to set cache')
+	}
+
 	await redisClient.set(key, value, 'EX', expiry)
 }
 
 export const getCache = async (key: string) => {
-	const value = await redisClient.get(key)
-	return value
+	try {
+		const value = await redisClient.get(key)
+		return value
+	} catch (e) {
+		console.error('Error getting cache:', e)
+		throw new Error('Failed to get cache')
+	}
 }
 
 export const delCache = async (key: string) => {
-	await redisClient.del(key)
+	try {
+		await redisClient.del(key)
+	} catch (e) {
+		console.error('Error deleting cache:', e)
+		throw new Error('Failed to delete cache')
+	}
 }
 
 export const flushCache = async () => {
-	await redisClient.flushall()
+	try {
+		await redisClient.flushall()
+	} catch (e) {
+		console.error('Error flushing cache:', e)
+		throw new Error('Failed to flush cache')
+	}
 }
