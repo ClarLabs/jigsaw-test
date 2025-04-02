@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express'
 import { Post } from '../../../models/Post'
-import { isMongoId } from '../../../utils'
+import { isMongoId, setCache } from '../../../utils'
 
 export const updatePost = async (
 	req: Request<{ id: string }, null, { title: string; content: string; tags: string[] }>,
@@ -25,6 +25,10 @@ export const updatePost = async (
 		Object.assign(post, updates)
 
 		await post.save()
+
+		const cacheKey = `post:${id}`
+		const expiry = 60 * 60 // 1 hour
+		await setCache(cacheKey, JSON.stringify(post), expiry)
 
 		res.json(post)
 	} catch (err) {

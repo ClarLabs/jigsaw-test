@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from 'express'
 import { Post } from '../../../models/Post'
+import { flushCache } from '../../../utils'
 
 export const deleteByTag = async (req: Request<null, null, null, { tag: string }>, res: Response, next: NextFunction): Promise<void> => {
 	try {
@@ -15,6 +16,9 @@ export const deleteByTag = async (req: Request<null, null, null, { tag: string }
 			res.status(404).json({ error: 'Post not found' })
 			return
 		}
+
+		await flushCache()
+
 		res.json({ success: true })
 	} catch (err) {
 		next(err)

@@ -28,6 +28,13 @@ paths:
             type: integer
             default: 10
             minimum: 1
+        - name: clearCache
+          in: query
+          required: false
+          description: Return posts without cache
+          schema:
+            type: boolean
+            default: false
       responses:
         '200':
           description: Successful operation
@@ -147,6 +154,13 @@ paths:
             type: integer
             default: 10
             minimum: 1
+        - name: clearCache
+          in: query
+          required: false
+          description: Return posts without cache
+          schema:
+            type: boolean
+            default: false
       responses:
         '200':
           description: successful operation

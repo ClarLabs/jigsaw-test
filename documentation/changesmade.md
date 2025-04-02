@@ -32,3 +32,5 @@ Functions    : 90% ( 9/10 )
 Lines        : 89.18% ( 132/148 )
 
 I am not going to improve this, as it's just a test, but proof of concept at very least.
+
+Added basic redis cache to cache results

@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from 'express'
 import { Post } from '../../../models/Post'
+import { flushCache } from '../../../utils'
 
 export const createPost = async (
 	req: Request<null, null, { title: string; content: string; tags: string }>,
@@ -20,6 +21,8 @@ export const createPost = async (
 		})
 
 		await newPost.save()
+
+		await flushCache()
 		res.json(newPost)
 	} catch (err) {
 		next(err)

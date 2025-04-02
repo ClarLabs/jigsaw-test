@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express'
 import { Post } from '../../../models/Post'
-import { isMongoId } from '../../../utils'
+import { isMongoId, getCache, setCache } from '../../../utils'
 
 export const getPostById = async (req: Request<{ id: string }>, res: Response, next: NextFunction): Promise<void> => {
 	try {
@@ -11,12 +11,30 @@ export const getPostById = async (req: Request<{ id: string }>, res: Response, n
 			return
 		}
 
+		const cacheKey = `post:${id}`
+		const cachedPostStr = await getCache(cacheKey)
+		if (cachedPostStr) {
+			try {
+				const cachedPost = JSON.parse(cachedPostStr)
+				res.json({ ...cachedPost, isCached: true })
+				return
+			} catch (err) {
+				console.error('Error parsing cached post:', err)
+			}
+		}
+
 		const post = await Post.findById(id)
 		if (!post) {
 			res.status(404).json({ error: 'Post not found' })
 			return
 		}
-		res.json(post)
+
+		const expiry = 60 * 60 // 1 hour
+		await setCache(cacheKey, JSON.stringify(post), expiry)
+
+		const postObject = Object.assign({ ...post.toObject(), isCached: false })
+
+		res.json(postObject)
 	} catch (err) {
 		next(err)
 	}

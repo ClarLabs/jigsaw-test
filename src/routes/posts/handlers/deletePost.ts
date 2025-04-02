@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express'
 import { Post } from '../../../models/Post'
-import { isMongoId } from '../../../utils'
+import { isMongoId, delCache } from '../../../utils'
 
 export const deletePost = async (req: Request<{ id: string }>, res: Response, next: NextFunction): Promise<void> => {
 	try {
@@ -16,6 +16,10 @@ export const deletePost = async (req: Request<{ id: string }>, res: Response, ne
 			res.status(404).json({ error: 'Post not found' })
 			return
 		}
+
+		const cacheKey = `post:${id}`
+		await delCache(cacheKey)
+
 		res.json({ success: true })
 	} catch (err) {
 		next(err)
