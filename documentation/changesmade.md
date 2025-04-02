@@ -26,10 +26,10 @@ Added route to search for title or content, delete by tag and improved get to re
 
 I have added unit tests current coverage is:
 
-Statements   : 89.74% ( 140/156 )
-Branches     : 62.96% ( 17/27 )
-Functions    : 90% ( 9/10 )
-Lines        : 89.18% ( 132/148 )
+Statements   : 84.51% ( 202/239 )
+Branches     : 62.5% ( 25/40 )
+Functions    : 94.73% ( 18/19 )
+Lines        : 83.98% ( 194/231 )
 
 I am not going to improve this, as it's just a test, but proof of concept at very least.
 
